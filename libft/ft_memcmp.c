@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jegoh <jegoh@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/13 13:51:56 by jegoh             #+#    #+#             */
-/*   Updated: 2024/10/13 15:21:58 by jegoh            ###   ########.fr       */
+/*   Created: 2024/10/13 15:21:00 by jegoh             #+#    #+#             */
+/*   Updated: 2024/10/13 15:21:04 by jegoh            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int ft_atoi(const char *str)
+int ft_memcmp(const void *s1, const void *s2, size_t n)
 {
-    int result = 0;
-    int sign = 1;
-    while (*str == ' ' || (*str >= 9 && *str <= 13))
-        str++;
-    if (*str == '-' || *str == '+')
-        sign = (*str++ == '-') ? -1 : 1;
-    while (*str >= '0' && *str <= '9')
-        result = result * 10 + (*str++ - '0');
-    return (sign * result);
+    const unsigned char *p1 = s1;
+    const unsigned char *p2 = s2;
+    while (n--)
+    {
+        if (*p1 != *p2)
+            return (*p1 - *p2);
+        p1++;
+        p2++;
+    }
+    return (0);
 }

@@ -1,26 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jegoh <jegoh@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/13 13:51:56 by jegoh             #+#    #+#             */
-/*   Updated: 2024/10/13 15:21:58 by jegoh            ###   ########.fr       */
+/*   Created: 2024/10/13 15:23:31 by jegoh             #+#    #+#             */
+/*   Updated: 2024/10/13 15:23:35 by jegoh            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int ft_atoi(const char *str)
+char *ft_strtrim(char const *s1, char const *set)
 {
-    int result = 0;
-    int sign = 1;
-    while (*str == ' ' || (*str >= 9 && *str <= 13))
-        str++;
-    if (*str == '-' || *str == '+')
-        sign = (*str++ == '-') ? -1 : 1;
-    while (*str >= '0' && *str <= '9')
-        result = result * 10 + (*str++ - '0');
-    return (sign * result);
+    size_t start = 0;
+    size_t end = ft_strlen(s1);
+    while (s1[start] && ft_strchr(set, s1[start]))
+        start++;
+    while (end > start && ft_strchr(set, s1[end - 1]))
+        end--;
+    return (ft_substr(s1, start, end - start));
 }

@@ -1,26 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_lstclear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jegoh <jegoh@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/13 13:51:56 by jegoh             #+#    #+#             */
-/*   Updated: 2024/10/13 15:21:58 by jegoh            ###   ########.fr       */
+/*   Created: 2024/10/13 15:27:59 by jegoh             #+#    #+#             */
+/*   Updated: 2024/10/13 15:28:02 by jegoh            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int ft_atoi(const char *str)
+void ft_lstclear(t_list **lst, void (*del)(void *))
 {
-    int result = 0;
-    int sign = 1;
-    while (*str == ' ' || (*str >= 9 && *str <= 13))
-        str++;
-    if (*str == '-' || *str == '+')
-        sign = (*str++ == '-') ? -1 : 1;
-    while (*str >= '0' && *str <= '9')
-        result = result * 10 + (*str++ - '0');
-    return (sign * result);
+    t_list *current;
+    t_list *next;
+    if (lst && del)
+    {
+        current = *lst;
+        while (current)
+        {
+            next = current->next;
+            ft_lstdelone(current, del);
+            current = next;
+        }
+        *lst = NULL;
+    }
 }
