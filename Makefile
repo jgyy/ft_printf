@@ -4,7 +4,11 @@ CFLAGS = -Wall -Wextra -Werror
 AR = ar rcs
 RM = rm -f
 
-SRCS = ft_printf.c conversions.c utils.c
+SRCS = ft_printf.c \
+	convert_cspdi.c \
+	convert_uxp.c \
+	utils.c \
+
 OBJS = $(SRCS:.c=.o)
 
 LIBFT_DIR = libft

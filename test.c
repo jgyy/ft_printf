@@ -1,87 +1,67 @@
 #include <stdio.h>
-#include <limits.h>
 #include "ft_printf.h"
 
-#define RED "\033[0;31m"
-#define GREEN "\033[0;32m"
-#define RESET "\033[0m"
+int main(void) {
+    char c = 'A';
+    printf("Expected output: A\n");
+    ft_printf("Actual output: %c\n", c);
 
-void test_printf(const char *test_name, const char *format, ...)
-{
-    va_list args;
-    va_start(args, format);
+    char *str = "Hello, World!";
+    printf("Expected output: Hello, World!\n");
+    ft_printf("Actual output: %s\n", str);
 
-    char printf_buffer[1000];
-    va_list args_copy;
-    va_copy(args_copy, args);
-    int printf_result = vsnprintf(printf_buffer, sizeof(printf_buffer), format, args_copy);
-    va_end(args_copy);
+    int num = 42;
+    printf("Expected output: %p\n", &num);
+    ft_printf("Actual output: %p\n", &num);
 
-    char ft_printf_buffer[1000];
-    int saved_stdout = dup(STDOUT_FILENO);
-    int pipe_fd[2];
-    pipe(pipe_fd);
-    dup2(pipe_fd[1], STDOUT_FILENO);
-    close(pipe_fd[1]);
+    int decimal = 1234;
+    printf("Expected output: 1234\n");
+    ft_printf("Actual output: %d\n", decimal);
 
-    va_list args_copy2;
-    va_copy(args_copy2, args);
-    int ft_printf_result = ft_printf(format, args_copy2);
-    va_end(args_copy2);
+    int integer = -5678;
+    printf("Expected output: -5678\n");
+    ft_printf("Actual output: %i\n", integer);
 
-    fflush(stdout);
-    read(pipe_fd[0], ft_printf_buffer, sizeof(ft_printf_buffer));
-    dup2(saved_stdout, STDOUT_FILENO);
+    unsigned int u = 3000000000U;
+    printf("Expected output: 3000000000\n");
+    ft_printf("Actual output: %u\n", u);
 
-    if (printf_result == ft_printf_result && ft_strcmp(printf_buffer, ft_printf_buffer) == 0) {
-        printf(GREEN "PASS" RESET " %s\n", test_name);
-    } else {
-        printf(RED "FAIL" RESET " %s\n", test_name);
-        printf("Expected: %d, \"%s\"\n", printf_result, printf_buffer);
-        printf("Got     : %d, \"%s\"\n", ft_printf_result, ft_printf_buffer);
-    }
+    int hex_lower = 255;
+    printf("Expected output: ff\n");
+    ft_printf("Actual output: %x\n", hex_lower);
 
-    va_end(args);
-}
+    int hex_upper = 255;
+    printf("Expected output: FF\n");
+    ft_printf("Actual output: %X\n", hex_upper);
 
-int main()
-{
-    test_printf("Basic string", "Hello, world!");
-    test_printf("Multiple conversions", "Int: %d, String: %s, Char: %c", 42, "test", 'X');
+    printf("Expected output: %%\n");
+    ft_printf("Actual output: %%\n");
 
-    test_printf("Character - ASCII", "%c", 'A');
-    test_printf("Character - Number", "%c", 42);
-    test_printf("Character - NULL", "%c", 0);
+    printf("Expected output: '   42'\n");
+    ft_printf("Actual output: '%5d'\n", 42);
 
-    test_printf("String - Basic", "%s", "Hello, world!");
-    test_printf("String - Empty", "%s", "");
-    test_printf("String - NULL", "%s", NULL);
+    printf("Expected output: '42   '\n");
+    ft_printf("Actual output: '%-5d'\n", 42);
 
-    test_printf("Integer - Positive", "%d", 42);
-    test_printf("Integer - Negative", "%d", -42);
-    test_printf("Integer - Zero", "%d", 0);
-    test_printf("Integer - INT_MAX", "%d", INT_MAX);
-    test_printf("Integer - INT_MIN", "%d", INT_MIN);
+    printf("Expected output: '00042'\n");
+    ft_printf("Actual output: '%05d'\n", 42);
 
-    test_printf("Unsigned - Basic", "%u", 42);
-    test_printf("Unsigned - Zero", "%u", 0);
-    test_printf("Unsigned - UINT_MAX", "%u", UINT_MAX);
+    printf("Expected output: '  3.14'\n");
+    ft_printf("Actual output: '%7.2f'\n", 3.14159);
 
-    test_printf("Hexadecimal - Lowercase", "%x", 0xabcdef);
-    test_printf("Hexadecimal - Uppercase", "%X", 0xABCDEF);
-    test_printf("Hexadecimal - Zero", "%x", 0);
+    printf("Expected output: ' 42'\n");
+    ft_printf("Actual output: '% d'\n", 42);
 
-    int n = 42;
-    test_printf("Pointer", "%p", (void *)&n);
-    test_printf("Pointer - NULL", "%p", NULL);
+    printf("Expected output: '+42'\n");
+    ft_printf("Actual output: '%+d'\n", 42);
 
-    test_printf("Percent sign", "%%");
+    printf("Expected output: '0x2a'\n");
+    ft_printf("Actual output: '%#x'\n", 42);
+    printf("Expected output: '0X2A'\n");
+    ft_printf("Actual output: '%#X'\n", 42);
 
-    test_printf("Mixed - 1", "Hello %s, you are %d years old and your favorite letter is %c", "John", 25, 'Z');
-    test_printf("Mixed - 2", "Hex: %x, Pointer: %p, Unsigned: %u", 0xdecaf, (void *)&n, 123456);
-
-    test_printf("Edge - Empty format string", "");
-    test_printf("Edge - Only conversion specifiers", "%d%s%c%u%x%X%p%%");
+    printf("Expected output: '0x0002a'\n");
+    ft_printf("Actual output: '%#07x'\n", 42);
 
     return 0;
 }
